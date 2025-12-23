@@ -449,7 +449,7 @@ function init() {
     vsComputer = isAI;
     const p2Label = document.getElementById('p2-label');
     if (p2Label) {
-      p2Label.textContent = isAI ? '🤖 AI:' : '🟢 P2:';
+      p2Label.textContent = isAI ? '🤖🟢 AI:' : '🟢 P2:';
     }
     btn2P.classList.toggle('active', !isAI);
     btnAI.classList.toggle('active', isAI);

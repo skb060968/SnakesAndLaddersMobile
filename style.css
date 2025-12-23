@@ -63,7 +63,23 @@ Board column (left)
   background: #fff;
 }
 
-/* board frame image */
+/* Wooden frame around board */
+.board-wrapper::before {
+  content: "";
+  position: absolute;
+  top: -8%;
+  left: -8%;
+  right: -8%;
+  bottom: -8%;
+  background-image: url("images/frame-wood.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* board image */
 .board-img {
   position: absolute;
   inset: 0;
@@ -118,10 +134,85 @@ Board column (left)
   background-image: url("images/green.png");
 }
 
-/* Keep your existing animation class names:
-   .slide, .jump, .penalty, .token-active
-   They are defined in game.js via classes;
-   You can re‑use or simplify these animations if desired. */
+/* --- Token animations (from desktop) --- */
+
+/* Hop animation for each movement step */
+@keyframes token-slide {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  40% {
+    transform: translate(-50%, -52%) scale(1.05);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.token.slide {
+  animation: token-slide 0.35s ease-in-out;
+}
+
+/* Active player glow */
+.token-active {
+  box-shadow: 0 0 18px 6px rgba(255, 255, 255, 0.85);
+  animation: token-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes token-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Jump on six */
+@keyframes token-jump {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  30% {
+    transform: translate(-50%, -65%) scale(1.15);
+  }
+  60% {
+    transform: translate(-50%, -45%) scale(0.95);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.token.jump {
+  animation: token-jump 0.6s cubic-bezier(0.3, 0.9, 0.4, 1.2);
+}
+
+/* Penalty glow on third six */
+@keyframes token-penalty-glow {
+  0% {
+    box-shadow: 0 0 0px rgba(255, 0, 0, 0);
+  }
+  25% {
+    box-shadow: 0 0 30px 12px rgba(255, 0, 0, 0.9);
+  }
+  50% {
+    box-shadow: 0 0 40px 16px rgba(255, 0, 0, 1);
+  }
+  75% {
+    box-shadow: 0 0 30px 12px rgba(255, 0, 0, 0.9);
+  }
+  100% {
+    box-shadow: 0 0 0px rgba(255, 0, 0, 0);
+  }
+}
+
+.token.penalty {
+  animation: token-penalty-glow 1.2s ease-in-out;
+}
 
 /* -----------------------------
 Control column (right)
@@ -139,7 +230,7 @@ Control column (right)
   padding: 6px 8px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;          /* increased spacing between blocks */
   align-items: center;
   color: #fff;
 }
@@ -148,6 +239,7 @@ Control column (right)
 .panel-header {
   width: 100%;
   text-align: center;
+  margin-bottom: 4px; /* extra breathing room under title */
 }
 .title {
   font-size: 1.0rem;
@@ -165,7 +257,7 @@ Control column (right)
   width: 100%;
   display: flex;
   justify-content: center;
-  margin: 4px 0;
+  margin: 4px 0 6px;
 }
 .mode-toggle.modern {
   display: flex;
@@ -215,7 +307,7 @@ Control column (right)
 
 /* Dice */
 .dice-panel {
-  margin: 2px 0;
+  margin: 4px 0; /* slightly more space above/below dice */
 }
 .dice-stage {
   width: 70px;
@@ -245,51 +337,30 @@ Control column (right)
     inset 0 1px 2px rgba(255, 255, 255, 0.15),
     inset 0 -2px 3px rgba(0, 0, 0, 0.25);
 }
-.face1 {
-  background-image: url("images/die-1.png");
-}
-.face2 {
-  background-image: url("images/die-2.png");
-}
-.face3 {
-  background-image: url("images/die-3.png");
-}
-.face4 {
-  background-image: url("images/die-4.png");
-}
-.face5 {
-  background-image: url("images/die-5.png");
-}
-.face6 {
-  background-image: url("images/die-6.png");
-}
-.die-face:nth-child(1) {
-  transform: rotateY(0deg) translateZ(35px);
-}
-.die-face:nth-child(2) {
-  transform: rotateY(90deg) translateZ(35px);
-}
-.die-face:nth-child(3) {
-  transform: rotateY(180deg) translateZ(35px);
-}
-.die-face:nth-child(4) {
-  transform: rotateY(-90deg) translateZ(35px);
-}
-.die-face:nth-child(5) {
-  transform: rotateX(90deg) translateZ(35px);
-}
-.die-face:nth-child(6) {
-  transform: rotateX(-90deg) translateZ(35px);
-}
+.face1 { background-image: url("images/die-1.png"); }
+.face2 { background-image: url("images/die-2.png"); }
+.face3 { background-image: url("images/die-3.png"); }
+.face4 { background-image: url("images/die-4.png"); }
+.face5 { background-image: url("images/die-5.png"); }
+.face6 { background-image: url("images/die-6.png"); }
+.die-face:nth-child(1) { transform: rotateY(0deg) translateZ(35px); }
+.die-face:nth-child(2) { transform: rotateY(90deg) translateZ(35px); }
+.die-face:nth-child(3) { transform: rotateY(180deg) translateZ(35px); }
+.die-face:nth-child(4) { transform: rotateY(-90deg) translateZ(35px); }
+.die-face:nth-child(5) { transform: rotateX(90deg) translateZ(35px); }
+.die-face:nth-child(6) { transform: rotateX(-90deg) translateZ(35px); }
 
 /* Buttons */
 .controls-row,
 .bottom-row {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;      /* slightly increased gap */
   width: 100%;
   align-items: center;
+}
+.bottom-row {
+  margin-top: 4px; /* more space above New button */
 }
 .btn {
   width: 100%;
@@ -335,11 +406,11 @@ Control column (right)
 
 /* Status & message */
 .status-row {
-  margin-top: 2px;
-  margin-bottom: 2px;
+  margin-top: 4px;
+  margin-bottom: 4px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   width: 100%;
   align-items: center;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35);
