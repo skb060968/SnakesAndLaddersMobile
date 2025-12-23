@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>Snakes & Ladders – Mobile</title>
+
+    <!-- Mobile-specific stylesheet -->
+    <link rel="stylesheet" href="mobile-style.css" />
+    <link rel="manifest" href="manifest.json" />
+
+    <!-- Confetti (same as desktop) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+  </head>
+
+  <body>
+    <main class="app">
+      <!-- LEFT: BOARD -->
+      <section class="board-column">
+        <div id="board-wrapper" class="board-wrapper" aria-label="Game board">
+          <img
+            id="board-img"
+            class="board-img"
+            src="images/board.png"
+            alt="Board image"
+          />
+
+          <div id="grid" class="grid"></div>
+
+          <div id="token1" class="token token1"></div>
+          <div id="token2" class="token token2"></div>
+        </div>
+      </section>
+
+      <!-- RIGHT: COMPACT CONTROL PANEL -->
+      <aside class="control-column">
+        <header class="panel-header">
+          <h1 class="title">Snakes &amp; Ladders</h1>
+          <div id="turn" class="turn">Player 1's Turn</div>
+        </header>
+
+        <!-- MODE TOGGLE -->
+        <div class="mode-toggle modern" role="group" aria-label="Game Mode">
+          <button
+            id="mode-2p"
+            class="mode-btn active"
+            type="button"
+            aria-pressed="true"
+          >
+            2P
+          </button>
+          <button
+            id="mode-ai"
+            class="mode-btn"
+            type="button"
+            aria-pressed="false"
+          >
+            Vs AI
+          </button>
+        </div>
+
+        <!-- DICE -->
+        <div class="dice-panel">
+          <div class="dice-stage">
+            <div id="dice-cube" class="dice-cube">
+              <div class="die-face face1"></div>
+              <div class="die-face face2"></div>
+              <div class="die-face face3"></div>
+              <div class="die-face face4"></div>
+              <div class="die-face face5"></div>
+              <div class="die-face face6"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTROLS -->
+        <div class="controls-row">
+          <button id="roll-btn" class="btn primary">ROLL</button>
+        </div>
+
+        <!-- STATUS -->
+        <div class="status-row">
+          <div class="positions">
+            P1: <strong id="p1-pos">1</strong>
+          </div>
+          <div class="positions">
+            <span id="p2-label">P2:</span>
+            <strong id="p2-pos">1</strong>
+          </div>
+          <div id="message" class="message">Ready</div>
+        </div>
+
+        <!-- RESET -->
+        <div class="bottom-row">
+          <button id="reset-btn" class="btn secondary">New</button>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Update toast for new versions -->
+    <div id="update-toast" class="update-toast" hidden>
+      <span>New version available</span>
+      <button id="update-refresh-btn" type="button">Update</button>
+    </div>
+
+    <!-- Reuse existing game logic and SW -->
+    <script src="game.js"></script>
+  </body>
+</html>

@@ -1,0 +1,416 @@
+/* ==============================
+   Snakes & Ladders – Mobile CSS
+   Landscape‑first layout
+============================== */
+
+/* -----------------------------
+Reset & base
+----------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background:
+    url("images/wood.png") center/cover fixed,
+    linear-gradient(180deg, #efe8dd, #e0d2b9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+}
+
+/* Root layout container */
+.app {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+/* -----------------------------
+Board column (left)
+----------------------------- */
+.board-column {
+  flex: 0 0 55%;
+  max-width: 55%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 10px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  background: #fff;
+}
+
+/* board frame image */
+.board-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* keep board + frame intact */
+  z-index: 1;
+}
+
+/* Grid overlay – matches board area */
+.grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  gap: 2px;
+  padding: 6px;
+  z-index: 2;
+}
+
+.grid .cell {
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Tokens */
+.token {
+  position: absolute;
+  width: 5.5vw;  /* responsive to viewport width */
+  height: 5.5vw;
+  max-width: 26px;
+  max-height: 26px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 6;
+  transition:
+    left 260ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    top 260ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    box-shadow 0.2s ease;
+  background-size: cover;
+  background-position: center;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.4),
+    0 0 4px rgba(255, 255, 255, 0.15) inset;
+}
+
+.token1 {
+  background-image: url("images/red.png");
+}
+.token2 {
+  background-image: url("images/green.png");
+}
+
+/* Keep your existing animation class names:
+   .slide, .jump, .penalty, .token-active
+   They are defined in game.js via classes;
+   You can re‑use or simplify these animations if desired. */
+
+/* -----------------------------
+Control column (right)
+----------------------------- */
+.control-column {
+  flex: 1 1 45%;
+  max-width: 45%;
+  height: 100%;
+  max-height: 100%;
+  background: rgba(20, 10, 0, 0.5);
+  backdrop-filter: blur(4px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  margin-left: 4px;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  color: #fff;
+}
+
+/* Header */
+.panel-header {
+  width: 100%;
+  text-align: center;
+}
+.title {
+  font-size: 1.0rem;
+  font-family: "Georgia", serif;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+.turn {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* Mode toggle */
+.mode-toggle {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 4px 0;
+}
+.mode-toggle.modern {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+.mode-btn {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 800;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(180deg, #6b4a2b, #4b2a12);
+  box-shadow:
+    0 3px 0 #3a1f0d,
+    0 5px 12px rgba(0, 0, 0, 0.35);
+  opacity: 0.8;
+  letter-spacing: 0.2px;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    filter 0.12s ease,
+    background 0.2s ease;
+}
+.mode-btn:hover {
+  filter: brightness(1.06);
+}
+.mode-btn.active {
+  opacity: 1;
+  transform: translateY(1px);
+}
+#mode-2p.active {
+  background: linear-gradient(180deg, #2b6ef6, #1e4fbf);
+  box-shadow:
+    0 2px 0 #153b8f,
+    0 5px 12px rgba(0, 0, 0, 0.35);
+}
+#mode-ai.active {
+  background: linear-gradient(180deg, #2ecc71, #1e9e55);
+  box-shadow:
+    0 2px 0 #157a40,
+    0 5px 12px rgba(0, 0, 0, 0.35);
+}
+
+/* Dice */
+.dice-panel {
+  margin: 2px 0;
+}
+.dice-stage {
+  width: 70px;
+  height: 70px;
+  perspective: 900px;
+}
+.dice-cube {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 900ms cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+.dice-cube::before,
+.dice-cube::after {
+  content: none !important;
+}
+.die-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background-size: cover;
+  background-position: center;
+  border-radius: 0;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.15),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.25);
+}
+.face1 {
+  background-image: url("images/die-1.png");
+}
+.face2 {
+  background-image: url("images/die-2.png");
+}
+.face3 {
+  background-image: url("images/die-3.png");
+}
+.face4 {
+  background-image: url("images/die-4.png");
+}
+.face5 {
+  background-image: url("images/die-5.png");
+}
+.face6 {
+  background-image: url("images/die-6.png");
+}
+.die-face:nth-child(1) {
+  transform: rotateY(0deg) translateZ(35px);
+}
+.die-face:nth-child(2) {
+  transform: rotateY(90deg) translateZ(35px);
+}
+.die-face:nth-child(3) {
+  transform: rotateY(180deg) translateZ(35px);
+}
+.die-face:nth-child(4) {
+  transform: rotateY(-90deg) translateZ(35px);
+}
+.die-face:nth-child(5) {
+  transform: rotateX(90deg) translateZ(35px);
+}
+.die-face:nth-child(6) {
+  transform: rotateX(-90deg) translateZ(35px);
+}
+
+/* Buttons */
+.controls-row,
+.bottom-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  align-items: center;
+}
+.btn {
+  width: 100%;
+  max-width: 160px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  transform: translateY(0);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    filter 0.12s ease;
+}
+.btn.primary {
+  background: linear-gradient(180deg, #8b4513, #5c3317);
+  color: #fff;
+  box-shadow:
+    0 4px 0 #4b2a12,
+    0 6px 12px rgba(0, 0, 0, 0.35);
+}
+.btn.primary:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 2px 0 #4b2a12,
+    0 3px 6px rgba(0, 0, 0, 0.25);
+}
+.btn.secondary {
+  background: linear-gradient(180deg, #fdf6e3, #f2e0b6);
+  color: #5c3317;
+  box-shadow:
+    0 3px 0 #9c8a5c,
+    0 5px 10px rgba(0, 0, 0, 0.25);
+}
+.btn.secondary:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 1px 0 #9c8a5c,
+    0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Status & message */
+.status-row {
+  margin-top: 2px;
+  margin-bottom: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+  align-items: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35);
+}
+.status-row .positions {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+.message {
+  font-size: 0.9rem;
+  min-height: 22px;
+  text-align: center;
+}
+
+/* Update toast */
+.update-toast,
+#update-toast {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(30, 30, 30, 0.92);
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 10px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  z-index: 9999;
+  font-weight: 700;
+  font-size: 0.85rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+#update-toast button {
+  background: linear-gradient(180deg, #51cf66, #2f9e44);
+  border: none;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+#update-toast[hidden] {
+  display: none !important;
+}
+
+/* Optional: portrait fallback (stacked) */
+@media (max-width: 900px) and (orientation: portrait) {
+  body {
+    padding: 8px;
+  }
+  .app {
+    flex-direction: column;
+    height: 100dvh;
+    overflow-y: auto;
+  }
+  .board-column {
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
+  .board-wrapper {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+  .control-column {
+    flex: 1 1 auto;
+    max-width: 100%;
+    height: auto;
+    margin-left: 0;
+    margin-top: 6px;
+  }
+}
