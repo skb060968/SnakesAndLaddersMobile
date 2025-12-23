@@ -174,37 +174,36 @@ function animateSnakeOrLadder(player, targetCell, type, cb) {
   if (type === 'ladder') playSound('ladder');
   if (type === 'snake') playSound('snake');
 
-// 1) Small “hit” animation on current cell (head or ladder base)
   const hitClass = type === 'snake' ? 'snake-hit' : 'ladder-hit';
   token.classList.add(hitClass);
 
-  // Wait for CSS hit animation (~450–500ms), then run the diagonal arc
   const hitDuration = type === 'snake' ? 500 : 450;
 
   setTimeout(() => {
     token.classList.remove(hitClass);
 
+    const jump = setInterval(() => {
+      frame++;
+      const t = frame / frames;
+      const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      const x = start.x + (end.x - start.x) * ease;
+      const y = start.y + (end.y - start.y) * ease;
+      const lift = Math.sin(Math.PI * t) * 18;
 
-  const jump = setInterval(() => {
-    frame++;
-    const t = frame / frames;
-    const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-    const x = start.x + (end.x - start.x) * ease;
-    const y = start.y + (end.y - start.y) * ease;
-    const lift = Math.sin(Math.PI * t) * 18;
-    token.style.left = `${x}px`;
-    token.style.top = `${y - lift}px`;
+      token.style.left = `${x}px`;
+      token.style.top = `${y - lift}px`;
 
-    if (frame >= frames) {
-      clearInterval(jump);
-      positions[player] = targetCell;
-      placeTokens();
-      messageEl.textContent = type === 'ladder'
-        ? `🪜 Ladder! up to ${positions[player]}`
-        : `🐍 Snake! down to ${positions[player]}`;
-      cb && cb();
-    }
-  }, 22);
+      if (frame >= frames) {
+        clearInterval(jump);
+        positions[player] = targetCell;
+        placeTokens();
+        messageEl.textContent = type === 'ladder'
+          ? `🪜 Ladder! up to ${positions[player]}`
+          : `🐍 Snake! down to ${positions[player]}`;
+        if (cb) cb();
+      }
+    }, 22);
+  }, hitDuration);
 }
 
 // Step-by-step movement with slide
