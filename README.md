@@ -1,6 +1,6 @@
 # Snakes & Ladders 3D — PWA
 
-This repo contains a small Snakes & Ladders web game with PWA support.
+This repo contains a small Snakes & Ladders 3D web game with PWA support.
 
 ## PWA checklist
 

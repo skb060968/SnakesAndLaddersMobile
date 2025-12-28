@@ -1,10 +1,10 @@
 /* ==============================
    Snakes & Ladders PWA Service Worker
    - Cache-first strategy
-   - Update detection + prompt support + mobile compatibility
+   - Update detection + prompt support 
 ============================== */
 
-const CACHE_NAME = "snl-3d-v17"; // ⬅️ bump on every deploy
+const CACHE_NAME = "snl-3d-v18"; // ⬅️ bump on every deploy
 
 const ASSETS = [
   "./",
