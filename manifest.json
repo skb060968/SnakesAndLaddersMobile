@@ -2,7 +2,6 @@
   "name": "Snakes & Ladders 3D",
   "short_name": "S&L 3D",
   "start_url": "./index.html",
-  "orientation": "landscape",
   "display": "standalone",
   "scope": "./",
   "theme_color": "#667eea",
