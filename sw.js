@@ -4,7 +4,7 @@
    - Update detection + prompt support + mobile compatibility
 ============================== */
 
-const CACHE_NAME = "snl-3d-v15"; // ⬅️ bump on every deploy
+const CACHE_NAME = "snl-3d-v16"; // ⬅️ bump on every deploy
 
 const ASSETS = [
   "./",
