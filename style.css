@@ -1,6 +1,6 @@
 /* ==============================
    Snakes & Ladders – FINAL CSS
-   Mobile Portrait + Desktop
+   Mobile Portrait + Desktop Landscape
 ============================== */
 
 /* ---------- Reset ---------- */
@@ -10,8 +10,8 @@
   padding: 0;
 }
 
-html,
-body {
+html, body {
+  width: 100%;
   height: 100%;
 }
 
@@ -25,123 +25,115 @@ body {
   align-items: center;
 }
 
-/* ---------- App container ---------- */
+/* ---------- App Container ---------- */
 .app {
   width: 100%;
-  max-width: 420px;             /* 🔑 mobile portrait width */
-  height: 100%;
-  max-height: 100%;
+  max-width: 100vw;
+  height: 100svh;                /* safe viewport */
   display: flex;
-  flex-direction: column;
+  flex-direction: column;        /* portrait first */
+  align-items: center;
+  justify-content: center;
   gap: 12px;
-  padding: 10px;
+  padding: 8px;
 }
 
-/* =============================
-   BOARD (square, framed)
-============================= */
+/* =====================================================
+   BOARD BLOCK (square, includes frame + board)
+===================================================== */
 .board-column {
+  width: 100%;
   display: flex;
   justify-content: center;
 }
 
 .board-wrapper {
   position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1;          /* 🔑 always square */
-  max-width: 360px;
-
+  width: min(92vw, 380px);
+  aspect-ratio: 1 / 1;           /* perfect square */
   border-radius: 14px;
   overflow: hidden;
   background: transparent;
-  box-shadow: 0 22px 60px rgba(0,0,0,0.42);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.45);
 }
 
-/* Wooden frame */
-.board-wrapper::before {
-  content: "";
-  position: absolute;
-  inset: -8%;
-  background: url("images/frame-wood.png") center/cover no-repeat;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Board image */
+/* Board image (with frame baked in image) */
 .board-img {
   position: absolute;
-  inset: 6%;
-  width: 88%;
-  height: 88%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   z-index: 1;
 }
 
-/* Grid perfectly matches board */
+/* Grid overlay – EXACT board area */
 .grid {
   position: absolute;
-  inset: 6%;
+  inset: 0;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
+  padding: 6px;                  /* matches JS math */
+  gap: 0;
   z-index: 2;
 }
 
-/* =============================
-   TOKENS
-============================= */
+/* Tokens */
 .token {
   position: absolute;
-  width: 7%;
-  height: 7%;
-  max-width: 28px;
-  max-height: 28px;
+  width: 6%;
+  height: 6%;
+  max-width: 26px;
+  max-height: 26px;
   border-radius: 50%;
   transform: translate(-50%, -50%);
+  z-index: 6;
   background-size: cover;
   background-position: center;
-  z-index: 6;
   transition:
     left 260ms cubic-bezier(0.2, 0.9, 0.2, 1),
     top 260ms cubic-bezier(0.2, 0.9, 0.2, 1);
+  box-shadow:
+    0 4px 8px rgba(0,0,0,0.45),
+    inset 0 0 4px rgba(255,255,255,0.25);
 }
 
 .token1 { background-image: url("images/red.png"); }
 .token2 { background-image: url("images/green.png"); }
 
-/* =============================
-   TOKEN ANIMATIONS (ALL KEPT)
-============================= */
-@keyframes token-slide {
-  0% { transform: translate(-50%, -50%) scale(1); }
-  40% { transform: translate(-50%, -52%) scale(1.05); }
-  100% { transform: translate(-50%, -50%) scale(1); }
-}
-.token.slide { animation: token-slide 0.35s ease-in-out; }
-
+/* ---------- Token Animations ---------- */
 @keyframes token-jump {
   0% { transform: translate(-50%, -50%) scale(1); }
-  30% { transform: translate(-50%, -65%) scale(1.15); }
-  60% { transform: translate(-50%, -45%) scale(0.95); }
+  40% { transform: translate(-50%, -65%) scale(1.15); }
   100% { transform: translate(-50%, -50%) scale(1); }
 }
-.token.jump { animation: token-jump 0.6s cubic-bezier(0.3,0.9,0.4,1.2); }
+.token.jump { animation: token-jump 0.6s ease; }
 
-/* =============================
-   CONTROL PANEL
-============================= */
+@keyframes token-pulse {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.12); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+.token-active {
+  animation: token-pulse 1.1s infinite;
+  box-shadow: 0 0 18px rgba(255,255,255,0.95);
+}
+
+/* =====================================================
+   CONTROL PANEL (same visual width as board)
+===================================================== */
 .control-column {
-  width: 100%;
-  max-width: 360px;
-  margin: 0 auto;
+  width: min(92vw, 380px);
   background: rgba(20, 10, 0, 0.55);
   backdrop-filter: blur(4px);
   border-radius: 14px;
-  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.18);
+  padding: 12px 10px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
   align-items: center;
+  gap: 10px;
   color: #fff;
 }
 
@@ -150,77 +142,149 @@ body {
   text-align: center;
 }
 .title {
-  font-size: 1.2rem;
-  font-family: Georgia, serif;
+  font-size: 1.1rem;
+  font-family: "Georgia", serif;
 }
 .turn {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
 }
 
-/* Mode buttons */
+/* ---------- Mode Buttons ---------- */
 .mode-toggle {
-  width: 100%;
   display: flex;
+  width: 100%;
   gap: 8px;
 }
+
 .mode-btn {
   flex: 1;
-  padding: 10px;
+  padding: 8px 10px;
   border-radius: 10px;
   font-weight: 800;
-  border: none;
+  font-size: 0.85rem;
   cursor: pointer;
   color: #fff;
+  border: none;
   background: linear-gradient(180deg,#6b4a2b,#4b2a12);
+  box-shadow:
+    0 4px 0 #3a1f0d,
+    0 6px 14px rgba(0,0,0,0.35);
+  transition: transform .12s ease, box-shadow .12s ease;
 }
-.mode-btn.active {
+.mode-btn:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 2px 0 #3a1f0d,
+    0 3px 6px rgba(0,0,0,0.25);
+}
+#mode-2p.active {
   background: linear-gradient(180deg,#2b6ef6,#1e4fbf);
 }
+#mode-ai.active {
+  background: linear-gradient(180deg,#2ecc71,#1e9e55);
+}
 
-/* Dice */
+/* =====================================================
+   DICE (RESTORED & FIXED)
+===================================================== */
+.dice-panel {
+  margin: 6px 0;
+}
+
 .dice-stage {
-  width: 80px;
-  height: 80px;
+  width: 72px;
+  height: 72px;
   perspective: 900px;
 }
 
-/* Buttons */
+.dice-cube {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 900ms cubic-bezier(0.2,0.9,0.2,1);
+}
+
+.die-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+.face1 { background-image: url("images/die-1.png"); }
+.face2 { background-image: url("images/die-2.png"); }
+.face3 { background-image: url("images/die-3.png"); }
+.face4 { background-image: url("images/die-4.png"); }
+.face5 { background-image: url("images/die-5.png"); }
+.face6 { background-image: url("images/die-6.png"); }
+
+.die-face:nth-child(1) { transform: rotateY(0deg) translateZ(36px); }
+.die-face:nth-child(2) { transform: rotateY(90deg) translateZ(36px); }
+.die-face:nth-child(3) { transform: rotateY(180deg) translateZ(36px); }
+.die-face:nth-child(4) { transform: rotateY(-90deg) translateZ(36px); }
+.die-face:nth-child(5) { transform: rotateX(90deg) translateZ(36px); }
+.die-face:nth-child(6) { transform: rotateX(-90deg) translateZ(36px); }
+
+/* ---------- Buttons ---------- */
+.controls-row,
+.bottom-row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
 .btn {
   width: 100%;
-  padding: 12px;
+  max-width: 170px;
+  padding: 8px 12px;
   border-radius: 12px;
   font-weight: 800;
-  border: none;
+  font-size: 0.9rem;
   cursor: pointer;
+  border: none;
+  transition: transform .12s ease, box-shadow .12s ease;
 }
 
 .btn.primary {
   background: linear-gradient(180deg,#8b4513,#5c3317);
   color: #fff;
+  box-shadow:
+    0 4px 0 #4b2a12,
+    0 6px 12px rgba(0,0,0,0.35);
+}
+.btn.primary:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 2px 0 #4b2a12,
+    0 3px 6px rgba(0,0,0,0.25);
 }
 
 .btn.secondary {
   background: linear-gradient(180deg,#fdf6e3,#f2e0b6);
   color: #5c3317;
+  box-shadow:
+    0 3px 0 #9c8a5c,
+    0 5px 10px rgba(0,0,0,0.25);
 }
 
-/* =============================
-   DESKTOP (LANDSCAPE)
-============================= */
+/* ---------- Status ---------- */
+.status-row {
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* =====================================================
+   DESKTOP / LANDSCAPE
+===================================================== */
 @media (min-width: 900px) {
   .app {
-    max-width: 1000px;
     flex-direction: row;
-    align-items: stretch;
-  }
-
-  .board-column,
-  .control-column {
-    flex: 1;
-  }
-
-  .control-column {
-    height: auto;
+    align-items: center;
   }
 }
