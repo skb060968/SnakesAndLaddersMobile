@@ -483,7 +483,7 @@ body {
 
 .token-active {
   animation: token-pulse 1.2s ease-in-out infinite;
-  box-shadow: 0 0 18px 6px rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 20px 15px rgba(255, 255, 255, 0.85);
 }
 
 /* Penalty glow on third six */

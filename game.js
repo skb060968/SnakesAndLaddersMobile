@@ -145,7 +145,7 @@ function placeTokens() {
   const same = positions[1] === positions[2];
   const c1 = getCellCenter(positions[1]);
   const c2 = getCellCenter(positions[2]);
-  const offset = 18;
+  const offset = 10;
 
   if (same) {
     token1.style.left = `${c1.x - offset}px`;
