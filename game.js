@@ -54,8 +54,8 @@ let consecutiveSixes = { 1: 0, 2: 0 };
 let turnTotal = { 1: 0, 2: 0 };
 
 // snakes & ladders
-const snakes = { 96: 87, 89: 67, 80: 57, 70: 49, 45: 26, 23: 5 };
-const ladders = { 8: 32, 20: 42, 47: 68, 55: 76, 69: 90, 78: 97 };
+const snakes = { 96: 87, 89: 67, 80: 58, 70: 49, 45: 26, 23: 5 };
+const ladders = { 8: 32, 20: 42, 47: 68, 56: 75, 69: 90, 78: 97 };
 
 // AUDIO
 const sounds = {
