@@ -25,6 +25,32 @@ const p1posEl = document.getElementById('p1-pos');
 const p2posEl = document.getElementById('p2-pos');
 const controlColumn = document.querySelector('.control-column');
 
+const boardToggleBtn = document.getElementById('board-toggle-btn');
+
+const BOARD_SKINS = [
+  'images/board.png',
+  'images/board1.png'
+];
+
+let currentBoardIndex = 0;
+
+function setBoardSkin(index) {
+  currentBoardIndex = index;
+  if (!boardImg) return;
+  boardImg.src = BOARD_SKINS[currentBoardIndex];
+
+  // After image changes, re-align tokens to the new board
+  if (boardImg.complete) {
+    requestAnimationFrame(() => { updateTokenSize(); placeTokens(); });
+  } else {
+    boardImg.addEventListener('load', () =>
+      requestAnimationFrame(() => { updateTokenSize(); placeTokens(); }),
+      { once: true }
+    );
+  }
+}
+
+
 // Fix dice face sizing after each resize
 function updateDiceTransforms() {
   const diceStage = document.querySelector('.dice-stage');
@@ -596,5 +622,14 @@ function showUpdatePrompt(reg) {
     }
   };
 }
+
+if (boardToggleBtn) {
+  boardToggleBtn.addEventListener('click', () => {
+    const next = (currentBoardIndex + 1) % BOARD_SKINS.length;
+    setBoardSkin(next);
+  });
+}
+
+
 
 init();
